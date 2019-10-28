@@ -51,13 +51,17 @@ AfterAll(async () => {
 
 After(function () {
   let shotPath = path.resolve(`./screenshots/${faker.random.uuid()}.png`);
-  client.saveScreenshot(shotPath)
-
-  return Promise.all(
-    getScreenshots()
-      .map(file => {
-        attachedScreenshots.push(file);
-        return this.attach(fs.readFileSync(file), 'image/png');
+  
+  return new Promise((resolve, reject) => {
+    client
+      .saveScreenshot(shotPath)
+      .then((res) => {
+        resolve(res)
+        getScreenshots()
+          .map(file => {
+            attachedScreenshots.push(file);
+            return this.attach(fs.readFileSync(file), 'image/png');
+          })
       })
-  );
+  })
 });

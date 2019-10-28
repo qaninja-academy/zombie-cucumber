@@ -1,0 +1,21 @@
+{
+  "name": "zombie-cucumber",
+  "version": "1.0.0",
+  "description": "Template pra usar Cucumberjs com Nightwatch",
+  "main": "app.js",
+  "scripts": {
+    "test": "mkdirp report && cucumber-js --require cucumber.conf.js --require steps --format node_modules/cucumber-pretty --format json:report/cucumber_report.json"
+  },
+  "author": "Fernando Papito",
+  "license": "MIT",
+  "devDependencies": {
+    "chromedriver": "^77.0.0",
+    "cucumber": "^6.0.3",
+    "cucumber-html-reporter": "^5.0.2",
+    "cucumber-pretty": "^6.0.0",
+    "faker": "^4.1.0",
+    "mkdirp": "^0.5.1",
+    "nightwatch": "^1.2.4",
+    "nightwatch-api": "^2.3.0"
+  }
+}

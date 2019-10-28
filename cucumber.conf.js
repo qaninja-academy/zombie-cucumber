@@ -5,31 +5,18 @@ const { setDefaultTimeout, After, Before, AfterAll, BeforeAll } = require('cucum
 const { client, createSession, closeSession, startWebDriver, stopWebDriver } = require('nightwatch-api');
 const reporter = require('cucumber-html-reporter');
 
-const attachedScreenshots = getScreenshots();
-
-function getScreenshots() {
-  try {
-    const folder = path.resolve(__dirname, 'screenshots');
-
-    const screenshots = fs.readdirSync(folder).map(file => path.resolve(folder, file));
-    return screenshots;
-  } catch (err) {
-    return [];
-  }
-}
-
 setDefaultTimeout(60000);
 
 // Hooks do Cucumber.js
-
-Before(function () {
-  client.resizeWindow(1920, 1080)
-})
 
 BeforeAll(async () => {
   await startWebDriver();
   await createSession();
 });
+
+Before(function () {
+  client.resizeWindow(1920, 1080)
+})
 
 AfterAll(async () => {
   await closeSession();
@@ -51,17 +38,13 @@ AfterAll(async () => {
 
 After(function () {
   let shotPath = path.resolve(`./screenshots/${faker.random.uuid()}.png`);
-  
+
   return new Promise((resolve, reject) => {
     client
       .saveScreenshot(shotPath)
       .then((res) => {
         resolve(res)
-        getScreenshots()
-          .map(file => {
-            attachedScreenshots.push(file);
-            return this.attach(fs.readFileSync(file), 'image/png');
-          })
+        return this.attach(fs.readFileSync(shotPath), 'image/png');
       })
   })
 });
